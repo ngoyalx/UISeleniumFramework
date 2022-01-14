@@ -40,7 +40,9 @@ public class PaymentPage extends BaseWebPage {
         waitAndTypeInElement(cvv,"345");
         waitAndTypeInElement(zipcode,"1005");
         clickElement(payButton);
-        clickElement(payButton);
+        Thread.sleep(5000);
+        //driver.switchTo().defaultContent();
+
         return new ConfirmationPage();
     }
 }

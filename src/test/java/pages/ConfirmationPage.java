@@ -14,6 +14,7 @@ public class ConfirmationPage extends BaseWebPage {
     }
 
     public void verifyPaymentIsSuccessful(){
+        waitAndGetTextFromElement(successMessage);
         Assert.assertEquals("Payment was not successful", "PAYMENT SUCCESS", waitAndGetTextFromElement(successMessage));
     }
 }
