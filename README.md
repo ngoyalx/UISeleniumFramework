@@ -8,15 +8,12 @@ Booking.com UI scenarios are automated using Cucumber framework
     - **_Step Definitions:_** ./src/test/java/steps
     - **_Pages:_**  ./src/test/java/pages
 
-3. 76.0 Chrome driver version is in use https://chromedriver.storage.googleapis.com/index.html?path=76.0.3809.68/
-   Please check compatibility with system and replace chrome driver under drivers folder with
-
-4. **Command to run all scenarios:**
+3**Command to run all scenarios:**
     ```bash
     mvn clean verify
     ```
 
-5. **Run Time Parameters:**
+4. **Run Time Parameters:**
     - **_Mandatory Parameters:_**
     ```bash
     -DbaseUrl="**Pass Application Url here**"
@@ -45,7 +42,7 @@ Booking.com UI scenarios are automated using Cucumber framework
     ```
 
 
-6. **Examples:**
+5. **Examples:**
     ```bash
     mvn clean verify -DbaseUrl="https://www.booking.com/" -DcucumberTags="@hotelSearch" 
     ```
@@ -60,7 +57,7 @@ Booking.com UI scenarios are automated using Cucumber framework
     -DbrowserMode="headless"
     ```
 
-7. **Report Generation command:**
+6. **Report Generation command:**
     ```bash
     mvn allure:serve
     ```
