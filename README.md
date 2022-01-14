@@ -8,7 +8,7 @@ Booking.com UI scenarios are automated using Cucumber framework
     - **_Step Definitions:_** ./src/test/java/steps
     - **_Pages:_**  ./src/test/java/pages
 
-3**Command to run all scenarios:**
+3. **Command to run all scenarios:**
     ```bash
     mvn clean verify
     ```
