@@ -32,8 +32,9 @@ Booking.com UI scenarios are automated using Cucumber framework
     ```bash
     mvn clean verify -DcucumberTags="@shopping" 
     ```
+   Parallel Testing
+   
     ```bash
-    Parallel Testing
     mvn clean verify -DcucumberTags="@carSearch" -DforkCount=2
     ```
 
@@ -41,8 +42,8 @@ Booking.com UI scenarios are automated using Cucumber framework
     ```bash
     allure generate -c target/allure-results
     ```
+   To open the report, cd till taget folder and run the following command
    ```bash
-    To open the report, cd till taget folder and run the following command
     allure serve
     ```
 
