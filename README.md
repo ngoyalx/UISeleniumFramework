@@ -16,7 +16,7 @@ Booking.com UI scenarios are automated using Cucumber framework
     ```
    cd to the project directory and run
     ```bash
-    mvn clean verify
+    mvn clean verify -DcucumberTags="@shopping"
     ```
 
 4. **Run Time Parameters:**

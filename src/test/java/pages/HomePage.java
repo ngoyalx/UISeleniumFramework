@@ -11,12 +11,24 @@ public class HomePage extends BaseWebPage {
     By moisturizersButton = By.xpath("//a[@href='/moisturizer']");
     By sunscreensButton = By.xpath("//a[@href='/sunscreen']");
 
+    /***
+     * used to open the application and wait until home page loaded
+     * @throws InterruptedException
+     */
+    public void openHomePage() throws InterruptedException {
+        driver.get("https://weathershopper.pythonanywhere.com/");
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
     public Integer getCurrentTemperature(){
        return Integer.parseInt(driver.findElement(currentTemperature).getText().split(" ")[0]);
     }
 
+    /***
+     * choose product based on the temperature
+     * @return
+     */
     public ProductsPage selectProduct(){
-        System.out.println("current temp is " + getCurrentTemperature());
         if(getCurrentTemperature() <= 19){
             selectMoisturizer();
             setProductSelected("moisturizer");
@@ -33,10 +45,5 @@ public class HomePage extends BaseWebPage {
 
     public void selectSunscreen(){
         driver.findElement(sunscreensButton).click();
-    }
-
-    public void openHomePage() throws InterruptedException {
-        driver.get("https://weathershopper.pythonanywhere.com/");
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 }

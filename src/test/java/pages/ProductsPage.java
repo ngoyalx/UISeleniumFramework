@@ -16,70 +16,66 @@ public class ProductsPage extends BaseWebPage {
     By cart = By.xpath("//span[@id='cart']");
 
 
+    /***
+     * select cheapest product based on the current product page(moisturizer or sunscreen)
+     */
     public void addProducts(){
         if(getProductSelected().equalsIgnoreCase("moisturizer")){
-            selectCheapestMoisturizers();
+            selectCheapestProducts("Aloe", "Almond");
         }else if(getProductSelected().equalsIgnoreCase("sunscreen")){
-            selectCheapestSunscreens();
+            selectCheapestProducts("SPF-50", "SPF-30");
         }
     }
 
-    public void selectCheapestMoisturizers(){
+    /**
+     * Add the cheapest products to the cart
+     * @param product1
+     * @param product2
+     */
+    public void selectCheapestProducts(String product1, String product2){
         List<WebElement> allProducts1 = driver.findElements(allProducts);
-        List<WebElement> aloeProducts;
-        List<WebElement> almondProducts;
-        aloeProducts = allProducts1.stream().filter(product -> product.getText().contains("Aloe")).collect(Collectors.toList());
-        almondProducts = allProducts1.stream().filter(product -> product.getText().contains("Almond")).collect(Collectors.toList());
-        List<String> aloePrices = new ArrayList<>();
-        List<String> almondPrices = new ArrayList<>();
-
-        for(int i=0; i<aloeProducts.size();i++){
-            String aloePriceArray[] = aloeProducts.get(i).findElement(productPrice).getText().split(" ");
-            String aloePriceStr = aloePriceArray[aloePriceArray.length-1];
-            aloePrices.add(aloePriceStr);
-        }
-
-        for(int i=0; i<almondProducts.size();i++){
-            String almondPriceArray[] = almondProducts.get(i).findElement(productPrice).getText().split(" ");
-            String almondPriceStr = almondPriceArray[almondPriceArray.length-1];
-            almondPrices.add(almondPriceStr);
-        }
-
-        int cheapestAloeMoisturizerIndex = aloePrices.indexOf(Collections.min(aloePrices));
-        String cheapestAloeMoisturizerPrice = aloePrices.get(cheapestAloeMoisturizerIndex);
-        int cheapestAlmondMoisturizerIndex = almondPrices.indexOf(Collections.min(almondPrices));
-        String cheapestAlmondMoisturizerPrice = almondPrices.get(cheapestAlmondMoisturizerIndex);
-        clickAddButton(cheapestAloeMoisturizerPrice);
-        clickAddButton(cheapestAlmondMoisturizerPrice);
+        List<WebElement> product1List = getFilteredProductsByName(allProducts1,product1);
+        List<WebElement> product2List = getFilteredProductsByName(allProducts1, product2);
+        List<String> product1PriceList = getPriceList(product1List);
+        List<String> product2PriceList = getPriceList(product2List);
+        clickAddButton(getCheapestProductPrice(product1PriceList));
+        clickAddButton(getCheapestProductPrice(product2PriceList));
     }
 
-    public void selectCheapestSunscreens(){
-        List<WebElement> allProducts1 = driver.findElements(allProducts);
-        List<WebElement> SPF50Products = new ArrayList<>();
-        List<WebElement> SPF30Products = new ArrayList<>();
-        SPF50Products = allProducts1.stream().filter(product -> product.getText().contains("SPF-50")).collect(Collectors.toList());
-        SPF30Products = allProducts1.stream().filter(product -> product.getText().contains("SPF-30")).collect(Collectors.toList());
-        List<String> SPF50Prices = new ArrayList<>();
-        List<String> SPF30Prices = new ArrayList<>();
+    /**
+     * filters the products from all products based on the name
+     * @param allProducts
+     * @param productName
+     * @return
+     */
+    private List<WebElement> getFilteredProductsByName(List<WebElement> allProducts, String productName){
+        return allProducts.stream()
+                .filter(product -> product.getText().contains(productName)).collect(Collectors.toList());
+    }
 
-        for(int i=0; i<SPF50Products.size();i++){
-            String SPF50PriceArray[] = SPF50Products.get(i).findElement(productPrice).getText().split(" ");
-            String SPF50PriceStr = SPF50PriceArray[SPF50PriceArray.length-1];
-            SPF50Prices.add(SPF50PriceStr);
+    /**
+     * gives back the price list of all products
+     * @param productList
+     * @return
+     */
+    private List<String> getPriceList(List<WebElement> productList){
+        List<String> priceList = new ArrayList<>();
+        for (WebElement webElement : productList) {
+            String[] priceArray = webElement.findElement(productPrice).getText().split(" ");
+            String priceStr = priceArray[priceArray.length - 1];
+            priceList.add(priceStr);
         }
+        return priceList;
+    }
 
-        for(int i=0; i<SPF30Products.size();i++){
-            String SPF30PriceArray[] = SPF30Products.get(i).findElement(productPrice).getText().split(" ");
-            String SPF30PriceStr = SPF30PriceArray[SPF30PriceArray.length-1];
-            SPF30Prices.add(SPF30PriceStr);
-        }
-
-        int cheapestAloeMoisturizerIndex = SPF50Prices.indexOf(Collections.min(SPF50Prices));
-        String cheapestAloeMoisturizerPrice = SPF50Prices.get(cheapestAloeMoisturizerIndex);
-        int cheapestAlmondMoisturizerIndex = SPF30Prices.indexOf(Collections.min(SPF30Prices));
-        String cheapestAlmondMoisturizerPrice = SPF30Prices.get(cheapestAlmondMoisturizerIndex);
-        clickAddButton(cheapestAloeMoisturizerPrice);
-        clickAddButton(cheapestAlmondMoisturizerPrice);
+    /***
+     * return the cheapest product price
+     * @param priceList
+     * @return
+     */
+    private String getCheapestProductPrice(List<String> priceList){
+        int cheapestProductIndex = priceList.indexOf(Collections.min(priceList));
+        return priceList.get(cheapestProductIndex);
     }
 
     void clickAddButton(String price){
@@ -88,7 +84,7 @@ public class ProductsPage extends BaseWebPage {
 
     public PaymentPage clickCartButton() throws InterruptedException {
         driver.findElement(cart).click();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         return new PaymentPage();
     }
 }

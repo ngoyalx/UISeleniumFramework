@@ -14,19 +14,11 @@ public class PaymentPage extends BaseWebPage {
     By zipcode = By.xpath("//input[@id='billing-zip']");
     By payButton = By.xpath("//span[@class='iconTick']");
 
-    void waitAndClickElement(By element){
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(element))).click();
-    }
-
-    void waitAndTypeInElement(By element, String text) throws InterruptedException {
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(element))).sendKeys(text);
-        Thread.sleep(2000);
-    }
-
-    void clickElement(By element){
-        driver.findElement(element).click();
-    }
-
+    /***
+     * method to fill in credit card details on the payment page
+     * @return
+     * @throws InterruptedException
+     */
     public ConfirmationPage makePayment() throws InterruptedException {
         waitAndClickElement(paymentButton);
         driver.switchTo().frame("stripe_checkout_app");
@@ -41,8 +33,20 @@ public class PaymentPage extends BaseWebPage {
         waitAndTypeInElement(zipcode,"1005");
         clickElement(payButton);
         Thread.sleep(5000);
-        //driver.switchTo().defaultContent();
-
         return new ConfirmationPage();
     }
+
+    void waitAndClickElement(By element){
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(element))).click();
+    }
+
+    void waitAndTypeInElement(By element, String text) throws InterruptedException {
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(element))).sendKeys(text);
+        Thread.sleep(2000);
+    }
+
+    void clickElement(By element){
+        driver.findElement(element).click();
+    }
+
 }
