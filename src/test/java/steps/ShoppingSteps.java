@@ -21,13 +21,13 @@ public class ShoppingSteps {
         homePage.openHomePage();
     }
 
-    @When("I select product to cart based on temperature")
-    public void iSelectProductToCartBasedOnTemperature() {
+    @When("I select product based on temperature")
+    public void iSelectProductBasedOnTemperature() {
         productsPage = homePage.selectProduct();
     }
 
-    @And("I add cheapest products to cart")
-    public void iAddCheapestProductsToCart() {
+    @And("I add least expensive products to cart")
+    public void iAddCheapestProductsToCart() throws InterruptedException {
         productsPage.addProducts();
     }
 
@@ -44,5 +44,10 @@ public class ShoppingSteps {
     @Then("I verify payment is successful")
     public void iVerifyPaymentIsSuccessful() {
         confirmationPage.verifyPaymentIsSuccessful();
+    }
+
+    @Then("I verify the price of products in cart is same as of products page")
+    public void iVerifyThePriceOfProductsInCartIsSameAsOfProductsPage() {
+        paymentPage.verifyProductPrices();
     }
 }

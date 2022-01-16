@@ -19,27 +19,39 @@ public class ProductsPage extends BaseWebPage {
     /***
      * select cheapest product based on the current product page(moisturizer or sunscreen)
      */
-    public void addProducts(){
+    public void addProducts() throws InterruptedException {
         if(getProductSelected().equalsIgnoreCase("moisturizer")){
-            selectCheapestProducts("Aloe", "Almond");
+            setPriceForAloeProduct(getLeastExpensiveProductPrice("Aloe"));
+            setPriceForAlmondProduct(getLeastExpensiveProductPrice("Almond"));
+            Thread.sleep(2000);
+            selectLeastExpensiveProducts(getLeastExpensiveProductPrice("Aloe"));
+            Thread.sleep(3000);
+            selectLeastExpensiveProducts(getLeastExpensiveProductPrice("Almond"));
+            Thread.sleep(3000);
         }else if(getProductSelected().equalsIgnoreCase("sunscreen")){
-            selectCheapestProducts("SPF-50", "SPF-30");
+            setPriceForSPF30Product(getLeastExpensiveProductPrice("SPF-30"));
+            setPriceForSPF50Product(getLeastExpensiveProductPrice("SPF-50"));
+            Thread.sleep(2000);
+            selectLeastExpensiveProducts(getLeastExpensiveProductPrice("SPF-30"));
+            Thread.sleep(3000);
+            selectLeastExpensiveProducts(getLeastExpensiveProductPrice("SPF-50"));
+            Thread.sleep(3000);
         }
     }
 
     /**
-     * Add the cheapest products to the cart
-     * @param product1
-     * @param product2
+     * Add the least expensive products to the cart
+     * @param price
      */
-    public void selectCheapestProducts(String product1, String product2){
+    public void selectLeastExpensiveProducts(String price){
+        clickAddButton(price);
+    }
+
+    private String getLeastExpensiveProductPrice(String product){
         List<WebElement> allProducts1 = driver.findElements(allProducts);
-        List<WebElement> product1List = getFilteredProductsByName(allProducts1,product1);
-        List<WebElement> product2List = getFilteredProductsByName(allProducts1, product2);
+        List<WebElement> product1List = getFilteredProductsByName(allProducts1,product);
         List<String> product1PriceList = getPriceList(product1List);
-        List<String> product2PriceList = getPriceList(product2List);
-        clickAddButton(getCheapestProductPrice(product1PriceList));
-        clickAddButton(getCheapestProductPrice(product2PriceList));
+        return getLeastExpensiveProductPrice(product1PriceList);
     }
 
     /**
@@ -73,13 +85,13 @@ public class ProductsPage extends BaseWebPage {
      * @param priceList
      * @return
      */
-    private String getCheapestProductPrice(List<String> priceList){
-        int cheapestProductIndex = priceList.indexOf(Collections.min(priceList));
-        return priceList.get(cheapestProductIndex);
+    private String getLeastExpensiveProductPrice(List<String> priceList){
+        int leastExpensiveProductIndex = priceList.indexOf(Collections.min(priceList));
+        return priceList.get(leastExpensiveProductIndex);
     }
 
     void clickAddButton(String price){
-        driver.findElement(By.xpath("//p[@class='font-weight-bold top-space-10']/following-sibling::p[contains(text(),"+price+")]/following-sibling::button")).click();
+        driver.findElement(By.xpath("//p[@class='font-weight-bold top-space-10']/following-sibling::p[contains(text(),'"+price+"')]/following-sibling::button")).click();
     }
 
     public PaymentPage clickCartButton() throws InterruptedException {
