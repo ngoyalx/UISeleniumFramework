@@ -7,14 +7,21 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Hooks extends BaseWebPage {
+    WebDriver driver;
 
     @Before
     public void startWebDriver() {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
+        if(System.getProperty("browser")!=null && System.getProperty("browser").equalsIgnoreCase("firefox")){
+            WebDriverManager.firefoxdriver().setup();
+            driver = new FirefoxDriver();
+        }else{
+            WebDriverManager.chromedriver().setup();
+            driver = new ChromeDriver();
+        }
         BaseWebPage.driver = driver;
         WebDriverWait wait = new WebDriverWait(driver, 20);
         setWait(wait);
